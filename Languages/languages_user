@@ -1,0 +1,35 @@
+const mongoose = require('mongoose');
+const AutoIncrement = require('mongoose-sequence')(mongoose);
+
+const languagesUserSchema = new mongoose.Schema({
+    device_id:String,
+    languages:String,
+    created_at: {type: Date, default: Date.now },
+    updated_at: {type: Date}
+});
+
+languagesUserSchema.plugin(AutoIncrement, {inc_field: 'languages_user_id'});
+const LanguagesUser = mongoose.model('LanguagesUser', languagesUserSchema);
+
+async function createLanguagesUser(data)
+{
+    if(data.device_id && data.languages)
+        {
+            const languagesUser = new LanguagesUser({
+                device_id: data.device_id,
+                languages:data.languages
+            });
+            const result = await languagesUser.save();
+            return result;
+        }
+        return "Please Add All the Mandatory fields";
+    
+ 
+}
+
+async function getLanguagesUser()
+{
+    return await LanguagesUser.find();
+}
+
+module.exports = {createLanguagesUser,getLanguagesUser}
