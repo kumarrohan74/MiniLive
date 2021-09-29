@@ -24,7 +24,8 @@ const Users = mongoose.model('Users', usersSchema);
 
 async function createUsers(data)
 {
-    if(data.is_trending && data.like_count && data.status)
+    console.log(data)
+    if((data.is_trending >= 0) && (data.like_count >= 0) && (data.status === 0 || data.status === 1))
         {
             const users = new Users({
                 username:data.username,
@@ -52,4 +53,9 @@ async function getUsers()
     return await Users.find();
 }
 
-module.exports = {createUsers,getUsers}
+async function getUseById(data)
+{
+    return await Users.find({"user_id":data});
+}
+
+module.exports = {createUsers,getUsers,getUseById}

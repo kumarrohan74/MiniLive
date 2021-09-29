@@ -2,7 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 const cors = require('cors');
-const path = require('path')
+const path = require('path');
+const Users = require('./Users/users');
+const Videos = require('./Video/videos');
 
 const app = express();
 const router = express.Router();
@@ -19,3 +21,27 @@ app.use(bodyparser.json());
 
 app.use(cors());
 app.use(router);
+
+
+/*-------------------------------User Api's---------------------------------------------------*/
+router.post('/v1/createUser', (req,res) => {
+    Users.createUsers(req.body).then((result) => res.json(result)).catch(err => res.json(err));
+});
+
+router.get('/v1/getUsers', (req,res) => {
+    Users.getUsers().then((result) => res.json(result)).catch(err => res.json(err));
+});
+
+router.get('/v1/getUserDetails/:id', (req,res) => {
+    Users.getUseById(req.params.id).then((result) => res.json(result)).catch(err => res.json(err));
+});
+
+
+/*-------------------------------Video Api's---------------------------------------------------*/
+router.post('/v1/postVideo', (req,res) => {
+    Videos.createVideos(req.body).then((result) => res.json(result)).catch(err => res.json(err));
+});
+
+router.get('/v1/getUserVideo/:user_id', (req,res) => {
+    Videos.getUserVideos(req.params.user_id).then((result) => res.json(result)).catch(err => res.json(err));
+});

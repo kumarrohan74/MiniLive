@@ -46,7 +46,7 @@ async function createVideos(data)
             const videos = new Videos({
                 user_id: data.user_id,
                 video_path:data.video_path,
-                mp4_url: data.mp4_status,
+                mp4_url: data.mp4_url,
                 video_thumbnail: data.video_thumbnail,
                 trending: data.trending,
                 audio_id: data.audio_id,
@@ -86,4 +86,10 @@ async function getVideos()
     return await Videos.find();
 }
 
-module.exports = {createVideos,getVideos}
+async function getUserVideos(data)
+{
+    const getVideo = await Videos.find({"user_id": data});
+    return getVideo;
+}
+
+module.exports = {createVideos,getVideos,getUserVideos}
