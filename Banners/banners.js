@@ -38,4 +38,32 @@ async function getBanner()
     return await Banner.find();
 }
 
-module.exports = {createBanner,getBanner}
+async function editBanner(data,id)
+{
+    const updatedData = await Banner.updateOne({"banner_id":id}, {
+                "img_url":data.img_url,
+                "name": data.name,
+                "action": data.action,
+                "type": data.type,
+                "status": data.status,
+    })
+    if(updatedData)
+    {
+        return await Banner.findOne({"banner_id":id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteBanner(id)
+{
+    if(id)
+    {
+        const deleteData = await Banner.deleteOne({"banner_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createBanner,getBanner,editBanner,deleteBanner}

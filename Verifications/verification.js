@@ -30,4 +30,30 @@ async function getVerification()
     return await Verification.find();
 }
 
-module.exports = {createVerification,getVerification}
+async function editVerification(data,id)
+{
+    const updateData = await Verification.updateOne({"verification_id":id},{
+        "user_id": data.user_id,
+                "otp": data.otp
+    })
+
+    if(updateData)
+    {
+        return await Verification.findOne({"verification_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteVerification(id)
+{
+    if(id)
+    {
+        const deleteData = await Verification.deleteOne({"verification_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createVerification,getVerification,editVerification,deleteVerification}

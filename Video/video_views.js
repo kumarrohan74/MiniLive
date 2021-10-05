@@ -30,4 +30,30 @@ async function getVideosViews()
     return await VideoViews.find();
 }
 
-module.exports = {createVideoViews,getVideosViews}
+async function editVideoViews(data,id)
+{
+    const updateData = await VideoViews.updateOne({"video_views_id":id},{
+        "device_id": data.device_id,
+        "video_id": data.video_id
+    })
+
+    if(updateData)
+    {
+        return await VideoViews.findOne({"video_views_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteVideoViews(id)
+{
+    if(id)
+    {
+        const deleteData = await VideoViews.deleteOne({"video_views_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createVideoViews,getVideosViews,editVideoViews,deleteVideoViews}

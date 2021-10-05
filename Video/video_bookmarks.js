@@ -30,4 +30,30 @@ async function getVideosBookmark()
     return await VideoBookmark.find();
 }
 
-module.exports = {createVideoBookmark,getVideosBookmark}
+async function editVideoBookmark(data,id)
+{
+    const updateData = await VideoBookmark.updateOne({"video_bookmark_id":id},{
+        "user_id": data.user_id,
+                "video_id": data.video_id
+    })
+
+    if(updateData)
+    {
+        return await VideoBookmark.findOne({"video_bookmark_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteVideoBookmark(id)
+{
+    if(id)
+    {
+        const deleteData = await VideoBookmark.deleteOne({"video_bookmark_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createVideoBookmark,getVideosBookmark,editVideoBookmark,deleteVideoBookmark}

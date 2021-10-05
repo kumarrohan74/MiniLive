@@ -32,4 +32,29 @@ async function getAudioCategory()
     return await AudioCategory.find();
 }
 
-module.exports = {createAudioCategory,getAudioCategory}
+async function editAudioCategory(data,id)
+{
+    const updateData = await AudioCategory.updateOne({"audio_category_id":id},{
+        "name": data.name,
+        "thumbnail": data.thumbnail,
+    });
+    if(updateData)
+    {
+        return await AudioCategory.findOne({"audio_category_id":id});
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteAudioCategory(id)
+{
+    if(id)
+    {
+        const deleteData = await AudioCategory.deleteOne({"audio_category_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createAudioCategory,getAudioCategory,editAudioCategory,deleteAudioCategory}

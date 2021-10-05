@@ -31,4 +31,32 @@ async function getEnergies()
     return await Energies.find();
 }
 
-module.exports = {createEnergies,getEnergies}
+async function editEnergies(data,id)
+{
+    const updateData = await Energies.updateOne({"energies_id":id},{
+        "name": data.name,
+        "email": data.email,
+        "password": data.password,
+        "remember_token": data.remember_token,
+    })
+
+    if(updateData)
+    {
+        return await Energies.findOne({"energies_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteEnergies(id)
+{
+    if(id)
+    {
+        const deleteData = await Energies.deleteOne({"energies_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createEnergies,getEnergies,editEnergies,deleteEnergies}

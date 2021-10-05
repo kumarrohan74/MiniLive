@@ -30,4 +30,30 @@ async function getVideoCategoryUser()
     return await Videocategoryusers.find();
 }
 
-module.exports = {createVideocategoryUser,getVideoCategoryUser}
+async function editVideoCategoryUser(data,id)
+{
+    const updateData = await Videocategoryusers.updateOne({"video_category_user_id":id},{
+        "device_id": data.device_id,
+                "categories": data.categories
+    })
+
+    if(updateData)
+    {
+        return await Videocategoryusers.findOne({"video_category_user_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteVideoCategoryUser(id)
+{
+    if(id)
+    {
+        const deleteData = await Videocategoryusers.deleteOne({"video_category_user_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createVideocategoryUser,getVideoCategoryUser,editVideoCategoryUser,deleteVideoCategoryUser}

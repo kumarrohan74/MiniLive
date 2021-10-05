@@ -30,4 +30,29 @@ async function getCategory()
     return await Category.find();
 }
 
-module.exports = {createCategory,getCategory}
+async function editCategory(data,id)
+{
+    const updateData = await Category.updateOne({"category_id":id},{
+        "name": data.name,
+    })
+
+    if(updateData)
+    {
+        return await Category.findOne({"category_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteCategory(id)
+{
+    if(id)
+    {
+        const deleteData = await Category.deleteOne({"category_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createCategory,getCategory,editCategory,deleteCategory}

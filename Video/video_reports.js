@@ -30,4 +30,30 @@ async function getVideosReports()
     return await VideoReports.find();
 }
 
-module.exports = {createVideoReports,getVideosReports}
+async function editVideoReports(data,id)
+{
+    const updateData = await VideoReports.updateOne({"video_reports_id":id},{
+        "user_id": data.user_id,
+        "video_id": data.video_id
+    })
+
+    if(updateData)
+    {
+        return await VideoReports.findOne({"video_reports_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteVideoReports(id)
+{
+    if(id)
+    {
+        const deleteData = await VideoReports.deleteOne({"video_reports_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createVideoReports,getVideosReports,editVideoReports,deleteVideoReports}

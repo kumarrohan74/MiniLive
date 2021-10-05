@@ -24,12 +24,37 @@ async function createSubCategory(data)
             return result;
         }
         return "Please Add All the Mandatory fields";
-    
- 
 }
+
 async function getSubCategory()
 {
     return await SubCategory.find();
 }
 
-module.exports = {createSubCategory,getSubCategory}
+async function editSubCategory(data,id)
+{
+    const updateData = await SubCategory.updateOne({"subcategory_id":id},{
+        "category_id": data.category_id,
+                "name": data.name
+    })
+
+    if(updateData)
+    {
+        return await SubCategory.findOne({"subcategory_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteSubCategory(id)
+{
+    if(id)
+    {
+        const deleteData = await SubCategory.deleteOne({"subcategory_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createSubCategory,getSubCategory,editSubCategory,deleteSubCategory}

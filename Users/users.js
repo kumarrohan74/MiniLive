@@ -58,4 +58,40 @@ async function getUseById(data)
     return await Users.find({"user_id":data});
 }
 
-module.exports = {createUsers,getUsers,getUseById}
+async function editUsers(data,id)
+{
+    var updateData = await Users.updateOne({"user_id": id}, {
+        "username":data.username,
+                "is_trending":data.is_trending,
+                "name": data.name,
+                "profile_pic": data.profile_pic,
+                "phone": data.phone,
+                "email": data.email,
+                "bio": data.bio,
+                "login_type": data.login_type,
+                "token" : data.token,
+                "firebase_token": data.firebase_token,
+                "meta": data.meta,
+                "like_count": data.like_count,
+                "status": data.status
+    });
+    if(updateData)
+    {
+        return await Users.findOne({"user_id": id});
+    }
+    else {
+        return {"message": "Not Updated"}
+    }
+}
+
+async function deleteUser(id)
+{
+    if(id)
+    {
+        const deleteData = await Users.deleteOne({"user":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createUsers,getUsers,getUseById,editUsers,deleteUser}

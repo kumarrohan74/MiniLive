@@ -33,9 +33,38 @@ async function createChallenge(data)
     
  
 }
-async function getAdmin()
+async function getChallenge()
 {
     return await Challenge.find();
 }
 
-module.exports = {createChallenge,getAdmin}
+async function editChallenge(data,id)
+{
+    const updateData = await Challenge.updateOne({"challenge_id":id},{
+        "user_id": data.user_id,
+                "name": data.name,
+                "details": data.details,
+                "thumb": data.thumb,
+                "status": data.status,
+    })
+
+    if(updateData)
+    {
+        return await Challenge.findOne({"challenge_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteChallengeReward(id)
+{
+    if(id)
+    {
+        const deleteData = await Challenge.deleteOne({"challenge_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createChallenge,getChallenge}

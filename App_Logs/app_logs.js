@@ -36,4 +36,6 @@ async function getAppLog()
     return await AppLog.find();
 }
 
+
+
 module.exports = {createAppLog,getAppLog}

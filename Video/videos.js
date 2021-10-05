@@ -92,4 +92,58 @@ async function getUserVideos(data)
     return getVideo;
 }
 
-module.exports = {createVideos,getVideos,getUserVideos}
+async function editVideos(data,id)
+{
+    const updateData = await Videos.updateOne({"video_id":id},{
+        user_id: data.user_id,
+                "video_path":data.video_path,
+                "mp4_url": data.mp4_url,
+                "video_thumbnail": data.video_thumbnail,
+                "trending": data.trending,
+                "audio_id": data.audio_id,
+                "use_audio": data.use_audio,
+                "description": data.description,
+                "hashtags" : data.hashtags,
+                "video_tag": data.video_tag,
+                "language_id": data.language_id,
+                "category_id": data.category_id,
+                "challenge_id": data.challenge_id,
+                "challenge_name": data.challenge_name,
+                "sub_category_id": data.sub_category_id,
+                "is_viewed": data.is_viewed,
+                "like_count": data.like_count,
+                "comment_count": data.comment_count,
+                "share_count": data.share_count,
+                "view_count": data.view_count,
+                "view_duration": data.view_duration,
+                "upvotes": data.upvotes,
+                "downvotes": data.downvotes,
+                "rating": data.rating,
+                "report_count": data.report_count,
+                "file_size": data.file_size,
+                "status": data.status,
+                "dash_status": data.dash_status,
+                "mp4_status": data.mp4_status,
+                "parent_video_id": data.parent_video_id
+    })
+
+    if(updateData)
+    {
+        return await Videos.findOne({"video_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteVideos(id)
+{
+    if(id)
+    {
+        const deleteData = await Videos.deleteOne({"video_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createVideos,getVideos,getUserVideos,editVideos,deleteVideos}

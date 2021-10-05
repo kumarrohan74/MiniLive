@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+const admin = require("firebase-admin");
 const Users = require('./Users/users');
 const Videos = require('./Video/videos');
 
@@ -14,6 +15,11 @@ mongoose.connect('mongodb+srv://kumar_rohan:kumarrohan74@cluster0.myb1i.mongodb.
     .catch(err => console.log(err));
 
 const port = process.env.PORT || 5000;
+
+if (process.env.NODE_ENV === 'production') {
+	app.use(express.static("public"));
+}
+
 app.listen(port,console.log(`server started on ${port}`));
 
 app.use(bodyparser.urlencoded({extended : true}));
@@ -22,10 +28,18 @@ app.use(bodyparser.json());
 app.use(cors());
 app.use(router);
 
+router.get('/', (req,res) => {
+    res.send("Welcome to MiniLive")
+});
+
 
 /*-------------------------------User Api's---------------------------------------------------*/
 router.post('/v1/createUser', (req,res) => {
     Users.createUsers(req.body).then((result) => res.json(result)).catch(err => res.json(err));
+});
+
+router.post('/v1/editUser/:id', (req,res) => {
+    Users.editUsers(req.body,req.params.id).then((result) => res.json(result)).catch(err => res.json(err));
 });
 
 router.get('/v1/getUsers', (req,res) => {
@@ -45,3 +59,5 @@ router.post('/v1/postVideo', (req,res) => {
 router.get('/v1/getUserVideo/:user_id', (req,res) => {
     Videos.getUserVideos(req.params.user_id).then((result) => res.json(result)).catch(err => res.json(err));
 });
+
+

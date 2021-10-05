@@ -30,4 +30,30 @@ async function getVideoHashtags()
     return await VideoHashtags.find();
 }
 
-module.exports = {createVideoHashtags,getVideoHashtags}
+async function editVideoHashtags(data,id)
+{
+    const updateData = await VideoHashtags.updateOne({"video_hashtags_id":id},{
+        "video_id": data.video_id,
+                "hashtags": data.hashtags
+    })
+
+    if(updateData)
+    {
+        return await VideoHashtags.findOne({"video_hashtags_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteVideoHashtags(id)
+{
+    if(id)
+    {
+        const deleteData = await VideoHashtags.deleteOne({"video_hashtags_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createVideoHashtags,getVideoHashtags,editVideoHashtags,deleteVideoHashtags}

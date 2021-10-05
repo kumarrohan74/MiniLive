@@ -36,4 +36,32 @@ async function getAdmin()
     return await Admin.find();
 }
 
-module.exports = {createAdmin,getAdmin}
+async function editAdmin(data,id)
+{
+    const updateData = await Admin.updateOne({"admin_id":id},{
+        "name": data.name,
+        "email": data.email,
+        "password": data.password,
+        "remember_token": data.remember_token,
+    })
+
+    if(updateData)
+    {
+        return await Admin.findOne({"admin_id": id})
+    }
+    else {
+        return {"message":"Not Updated"}
+    }
+}
+
+async function deleteAdmin(id)
+{
+    if(id)
+    {
+        const deleteData = await Admin.deleteOne({"admin_id":id});
+        return {"message":"Data Deleted"}
+    }
+    return {"message":"Not Deleted"}
+}
+
+module.exports = {createAdmin,getAdmin,editAdmin,deleteAdmin}
