@@ -57,7 +57,7 @@ async function editChallenge(data,id)
     }
 }
 
-async function deleteChallengeReward(id)
+async function deleteChallenge(id)
 {
     if(id)
     {
@@ -67,4 +67,4 @@ async function deleteChallengeReward(id)
     return {"message":"Not Deleted"}
 }
 
-module.exports = {createChallenge,getChallenge}
+module.exports = {createChallenge,getChallenge,editChallenge,deleteChallenge}

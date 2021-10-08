@@ -34,10 +34,9 @@ async function getEnergies()
 async function editEnergies(data,id)
 {
     const updateData = await Energies.updateOne({"energies_id":id},{
-        "name": data.name,
-        "email": data.email,
-        "password": data.password,
-        "remember_token": data.remember_token,
+        "energisable_type":data.energisable_type,
+                "energisable_id": data.energisable_id,
+                "amount": data.amount,
     })
 
     if(updateData)
