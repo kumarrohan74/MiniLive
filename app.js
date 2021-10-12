@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 const cors = require('cors');
 const path = require('path');
+
 const Admin  = require('./Admin/admin');
 const Audio = require('./Audio/audio');
 const AudioCategory = require('./Audio/audio_categories');
@@ -224,10 +225,6 @@ router.post('/v1/createUser', (req,res) => {
     Users.createUsers(req.body).then((result) => res.json(result)).catch(err => res.json(err));
 });
 
-router.post('/v1/editUser/:id', (req,res) => {
-    Users.editUsers(req.body,req.params.id).then((result) => res.json(result)).catch(err => res.json(err));
-});
-
 router.get('/v1/getUsers', (req,res) => {
     Users.getUsers().then((result) => res.json(result)).catch(err => res.json(err));
 });
@@ -272,6 +269,59 @@ router.post('/v1/editUserVideo/:id', (req,res) => {
 router.post('/v1/deleteVideos/:id', (req,res) => {
     Videos.deleteVideos(req.params.id).then((result) => res.json(result)).catch(err => res.json(err));
 });
+
+/*-------------------------------Sign Up Api's---------------------------------------------------*/
+
+router.post('/v1/firstTimeUser', (req,res) => {
+    Users.firstTimeUser(req.body).then((result) => res.json({
+        "status": 200,
+        "message": "First Time User",
+        "data": result
+    })).catch(err => res.json(err));
+}); 
+
+router.get('/v1/userExists/:phone', (req,res) => {
+    Users.UserExists(req.params.phone).then((result) => res.json({
+        "status": 200,
+        "message": "User Existing checking",
+        "data": result
+    })).catch(err => res.json(err));
+}); 
+
+router.post('/v1/signUp/:id', (req,res) => {
+    Users.editUsers(req.body,req.params.id).then((result) => res.json({
+        "status": 200,
+        "message": "Sign Up",
+        "data": result
+    })).catch(err => res.json(err));
+});
+
+router.post('/v1/isSignIn/:id', (req,res) => {
+    Users.isSignIn(req.params.id).then((result) => res.json({
+        "status": 200,
+        "message": "Sign In check",
+        "data": result
+    })).catch(err => res.json(err));
+});
+
+router.post('/v1/signOut/:id', (req,res) => {
+    Users.signOut(req.params.id).then((result) => res.json({
+        "status": 200,
+        "message": "Logout",
+        "data": result
+    })).catch(err => res.json(err));
+});
+
+router.get('/v1/getIdByDeviceId/:id', (req,res) => {
+    Users.getIdByDeviceId(req.params.id).then((result) => res.json({
+        "status": 200,
+        "message": "Get Id by Device Id",
+        "data": result
+    })).catch(err => res.json(err));
+});
+
+
+
 
 
 

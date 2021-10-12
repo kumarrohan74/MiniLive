@@ -28,9 +28,8 @@ async function createAdmin(data)
             return result;
         }
         return "Please Add All the Mandatory fields";
-    
- 
 }
+
 async function getAdmin()
 {
     return await Admin.find();
