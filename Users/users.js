@@ -182,4 +182,4 @@ async function getIdByDeviceId(device_id)
     }
 }
 
-module.exports = {createUsers,getUsers,getUseById,editUsers,deleteUser,firstTimeUser,UserExists,signOut,isSignIn,getIdByDeviceId}
+module.exports = {createUsers,getUsers,getUseById,editUsers,deleteUser,firstTimeUser,UserExists,signOut,isSignIn,getIdByDeviceId,Users}

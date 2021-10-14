@@ -17,6 +17,9 @@ const SubCategory = require('./Sub_Category/sub_categories');
 const Users = require('./Users/users');
 const Verification = require('./Verifications/verification');
 const Videos = require('./Video/videos');
+const Follows = require('./Follows/follows');
+const VideoDetails = require('./Video/video_details');
+const NearBy = require('./Near_By/nearBy');
 
 const app = express();
 const router = express.Router();
@@ -321,8 +324,30 @@ router.get('/v1/getIdByDeviceId/:id', (req,res) => {
 });
 
 
+/*-------------------------------Follow User Api's---------------------------------------------------*/
 
+router.post('/v1/followUser', (req,res) => {
+    Follows.createFollows(req.body).then((result) => res.json({
+        "status": 200,
+        "message": "Follow User",
+        "data": result
+    })).catch(err => res.json(err));
+}); 
 
+router.get('/v1/getFollowingVideos/:id', (req,res) => {
+    Follows.getFollwingVideos(req.params.id).then((result) => res.json({
+        "status": 200,
+        "message": "Following Videos",
+        "data": result
+    })).catch(err => res.json(err));
+}); 
 
+/*-------------------------------Near By Api's---------------------------------------------------*/
 
-
+router.post('/v1/nearByVideos', (req,res) => {
+    NearBy.findNearByVideos(req.body).then((result) => res.json({
+        "status": 200,
+        "message": "Near By Videos",
+        "data": result
+    })).catch(err => res.json(err));
+}); 

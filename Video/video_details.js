@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
+var Distance = require('geo-distance');
 
 const videoDetailsSchema = new mongoose.Schema({
     video_id:String,
@@ -69,4 +70,6 @@ async function deleteVideosDetails(id)
     return {"message":"Not Deleted"}
 }
 
-module.exports = {createVideoDetails,getVideosDetails,editVideosDetails,deleteVideosDetails}
+
+
+module.exports = {createVideoDetails,getVideosDetails,editVideosDetails,deleteVideosDetails,VideoDetails}

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
+const VideoDetails = require('../Video/video_details');
 
 const videosSchema = new mongoose.Schema({
     user_id:String,
@@ -76,6 +77,16 @@ async function createVideos(data)
                 parent_video_id: data.parent_video_id
             });
             const result = await videos.save();
+            const videoDetailsData = {
+                "video_id": result.video_id,
+                "country": data.country,
+                "region": data.region,
+                "city": data.city,
+                "user_ip": data.user_ip,
+                "latitude": data.latitude,
+                "longitude": data.longitude,
+            }
+            const createDetails = await VideoDetails.createVideoDetails(videoDetailsData);
             return result;
         }
         return "Please Add All the Mandatory fields";
@@ -146,4 +157,4 @@ async function deleteVideos(id)
     return {"message":"Not Deleted"}
 }
 
-module.exports = {createVideos,getVideos,getUserVideos,editVideos,deleteVideos}
+module.exports = {createVideos,getVideos,getUserVideos,editVideos,deleteVideos,Videos}
