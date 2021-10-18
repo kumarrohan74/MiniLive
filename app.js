@@ -351,3 +351,13 @@ router.post('/v1/nearByVideos', (req,res) => {
         "data": result
     })).catch(err => res.json(err));
 }); 
+
+/*-------------------------------Recommendation Api's---------------------------------------------------*/
+
+router.get('/v1/recommendedVideos', (req,res) => {
+    Videos.recommendedVideos(req.body).then((result) => res.json({
+        "status": 200,
+        "message": "Recommended Videos",
+        "data": result
+    })).catch(err => res.json(err));
+}); 

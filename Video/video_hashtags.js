@@ -34,7 +34,7 @@ async function editVideoHashtags(data,id)
 {
     const updateData = await VideoHashtags.updateOne({"video_hashtags_id":id},{
         "video_id": data.video_id,
-                "hashtags": data.hashtags
+        "hashtags": data.hashtags
     })
 
     if(updateData)
