@@ -20,6 +20,8 @@ const Videos = require('./Video/videos');
 const Follows = require('./Follows/follows');
 const VideoDetails = require('./Video/video_details');
 const NearBy = require('./Near_By/nearBy');
+const Languages = require('./Languages/languages');
+const Interests = require('./Interests/interests');
 
 const app = express();
 const router = express.Router();
@@ -276,88 +278,78 @@ router.post('/v1/deleteVideos/:id', (req,res) => {
 /*-------------------------------Sign Up Api's---------------------------------------------------*/
 
 router.post('/v1/firstTimeUser', (req,res) => {
-    Users.firstTimeUser(req.body).then((result) => res.json({
-        "status": 200,
-        "message": "First Time User",
-        "data": result
-    })).catch(err => res.json(err));
+    Users.firstTimeUser(req.body).then((result) => res.json(result)).catch(err => res.json(err));
 }); 
 
-router.get('/v1/userExists/:phone', (req,res) => {
-    Users.UserExists(req.params.phone).then((result) => res.json({
-        "status": 200,
-        "message": "User Existing checking",
-        "data": result
-    })).catch(err => res.json(err));
+router.get('/v1/userExists/:deviceId', (req,res) => {
+    Users.UserExists(req.params.deviceId).then((result) => res.json(result)).catch(err => res.json(err));
+}); 
+
+router.get('/v1/UserDeviceExists/:deviceId', (req,res) => {
+    Users.UserDeviceExists(req.params.deviceId).then((result) => res.json(result)).catch(err => res.json(err));
+}); 
+
+router.get('/v1/isEmailExists/:emailId', (req,res) => {
+    Users.isEmailExists(req.params.emailId).then((result) => res.json(result)).catch(err => res.json(err));
+}); 
+
+router.get('/v1/isPhoneNoExists/:phone', (req,res) => {
+    Users.isPhoneExists(req.params.phone).then((result) => res.json(result)).catch(err => res.json(err));
 }); 
 
 router.post('/v1/signUp/:id', (req,res) => {
-    Users.editUsers(req.body,req.params.id).then((result) => res.json({
-        "status": 200,
-        "message": "Sign Up",
-        "data": result
-    })).catch(err => res.json(err));
+    Users.editUsers(req.body,req.params.id).then((result) => res.json(result)).catch(err => res.json(err));
 });
 
 router.post('/v1/isSignIn/:id', (req,res) => {
-    Users.isSignIn(req.params.id).then((result) => res.json({
-        "status": 200,
-        "message": "Sign In check",
-        "data": result
-    })).catch(err => res.json(err));
+    Users.isSignIn(req.params.id).then((result) => res.json(result)).catch(err => res.json(err));
 });
 
 router.post('/v1/signOut/:id', (req,res) => {
-    Users.signOut(req.params.id).then((result) => res.json({
-        "status": 200,
-        "message": "Logout",
-        "data": result
-    })).catch(err => res.json(err));
+    Users.signOut(req.params.id).then((result) => res.json(result)).catch(err => res.json(err));
 });
 
 router.get('/v1/getIdByDeviceId/:id', (req,res) => {
-    Users.getIdByDeviceId(req.params.id).then((result) => res.json({
-        "status": 200,
-        "message": "Get Id by Device Id",
-        "data": result
-    })).catch(err => res.json(err));
+    Users.getIdByDeviceId(req.params.id).then((result) => res.json(result)).catch(err => res.json(err));
 });
 
 
 /*-------------------------------Follow User Api's---------------------------------------------------*/
 
 router.post('/v1/followUser', (req,res) => {
-    Follows.createFollows(req.body).then((result) => res.json({
-        "status": 200,
-        "message": "Follow User",
-        "data": result
-    })).catch(err => res.json(err));
+    Follows.createFollows(req.body).then((result) => res.json(result)).catch(err => res.json(err));
 }); 
 
 router.get('/v1/getFollowingVideos/:id', (req,res) => {
-    Follows.getFollwingVideos(req.params.id).then((result) => res.json({
-        "status": 200,
-        "message": "Following Videos",
-        "data": result
-    })).catch(err => res.json(err));
+    Follows.getFollwingVideos(req.params.id).then((result) => res.json(result)).catch(err => res.json(err));
 }); 
 
 /*-------------------------------Near By Api's---------------------------------------------------*/
 
 router.post('/v1/nearByVideos', (req,res) => {
-    NearBy.findNearByVideos(req.body).then((result) => res.json({
-        "status": 200,
-        "message": "Near By Videos",
-        "data": result
-    })).catch(err => res.json(err));
+    NearBy.findNearByVideos(req.body).then((result) => res.json(result)).catch(err => res.json(err));
 }); 
 
 /*-------------------------------Recommendation Api's---------------------------------------------------*/
 
 router.get('/v1/recommendedVideos', (req,res) => {
-    Videos.recommendedVideos(req.body).then((result) => res.json({
-        "status": 200,
-        "message": "Recommended Videos",
-        "data": result
-    })).catch(err => res.json(err));
+    Videos.recommendedVideos(req.body).then((result) => res.json(result)).catch(err => res.json(err));
+}); 
+
+/*-------------------------------Languages Api's---------------------------------------------------*/
+router.post('/v1/addLanguages', (req,res) => {
+    Languages.createLanguages(req.body).then((result) => res.json(result)).catch(err => res.json(err));
+});
+
+router.get('/v1/getLanguages', (req,res) => {
+    Languages.getLanguages().then((result) => res.json(result)).catch(err => res.json(err));
+}); 
+
+/*-------------------------------Interests Api's---------------------------------------------------*/
+router.post('/v1/addInterests', (req,res) => {
+    Interests.createInterests(req.body).then((result) => res.json(result)).catch(err => res.json(err));
+});
+
+router.get('/v1/getInterests', (req,res) => {
+    Interests.getInterests().then((result) => res.json(result)).catch(err => res.json(err));
 }); 

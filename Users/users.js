@@ -18,7 +18,7 @@ const usersSchema = new mongoose.Schema({
     meta: String,
     like_count: Number,
     status: Number,
-    device_id:Number,
+    device_id:String,
     IsSignIn:Number,
     created_at: {type: Date, default: Date.now },
     updated_at: {type: Date}
@@ -62,9 +62,49 @@ async function getUseById(data)
     return await Users.find({"user_id":data});
 }
 
+async function isEmailExists(email)
+{
+    const result = await Users.findOne({"email": email});
+        if(!result)
+        {
+            const returnObject = {
+                "resultCode":101,
+                "resultMessage": "User doesn't exist",
+                "data": false
+            }
+            return returnObject;
+        }
+        const returnObject = {
+            "resultCode":100,
+            "resultMessage": "Success",
+            "data": true
+        }
+        return returnObject;
+}
+
+async function isPhoneExists(phone)
+{
+    const result = await Users.findOne({"phone": phone});
+        if(!result)
+        {
+            const returnObject = {
+                "resultCode":101,
+                "resultMessage": "User doesn't exist",
+                "data": false
+            }
+            return returnObject;
+        }
+        const returnObject = {
+            "resultCode":100,
+            "resultMessage": "Success",
+            "data": true
+        }
+        return returnObject;
+}
+
 async function editUsers(data,id)
 {
-    var updateData = await Users.updateOne({"user_id": id}, {
+    var updateData = await Users.findOneAndUpdate({"user_id": id}, {
         //"username":data.username,
                 "is_trending":data.is_trending,
                 "name": data.name,
@@ -84,28 +124,82 @@ async function editUsers(data,id)
     });
     if(updateData)
     {
-        return await Users.findOne({"user_id": id});
+        const result = await Users.findOne({"user_id": id});
+        if(!result)
+        {
+            const returnObject = {
+                "resultCode":101,
+                "resultMessage": "User doesn't exist",
+                "data": null
+            }
+            return returnObject;
+        }
+        const returnObject = {
+            "resultCode":100,
+            "resultMessage": "Success",
+            "data": result
+        }
+        return returnObject;
     }
     else {
-        return {"message": "Not Updated"}
+        const returnObject = {
+            "resultCode":101,
+            "resultMessage": "User doesn't exist",
+            "data": null
+        }
+        return returnObject;
         
     }
 }
 
-async function UserExists(phone)
+async function UserExists(deviceId)
 {
-    const user = await Users.findOne({"phone":phone});
+    const user = await Users.findOne({"device_id":deviceId});
     if(user)
     {
         var updateData = await Users.updateOne({"user_id": user.user_id}, {
             "IsSignIn":1
         });
-        return {"user_id":user.user_id};
+        const returnObject = {
+            "resultCode":100,
+            "resultMessage": "Success",
+            "data": {"user_id":user.user_id}
+        }
+        return returnObject;
     }
     else {
-        return false;
+        const returnObject = {
+            "resultCode":102,
+            "resultMessage": "User Doesn't exist",
+            "data": null
+        }
+        return returnObject;
     }
 }
+
+async function UserDeviceExists(deviceId)
+{
+    const user = await Users.findOne({"device_id":deviceId});
+    console.log(user)
+    if(user)
+    {
+        const returnObject = {
+            "resultCode":100,
+            "resultMessage": "Success",
+            "data": {"user_id":user.user_id, "isSignIn": user.IsSignIn}
+        }
+        return returnObject;
+    }
+    else {
+        const returnObject = {
+            "resultCode":102,
+            "resultMessage": "User Doesn't exist",
+            "data": null
+        }
+        return returnObject;
+    }
+}
+
 
 async function signOut(id)
 {
@@ -114,10 +208,20 @@ async function signOut(id)
         var updateData = await Users.updateOne({"user_id": id}, {
             "IsSignIn":0
         });
-        return {"message": "Successfully logout"}
+        const returnObject = {
+            "resultCode":104,
+            "resultMessage": "Logout",
+            "data": true
+        }
+        return returnObject;
     }
     else {
-        return {"message": "Unable to logout"}
+        const returnObject = {
+            "resultCode":401,
+            "resultMessage": "Not Logout",
+            "data": false
+        }
+        return returnObject;
     }
     
 }
@@ -129,14 +233,29 @@ async function isSignIn(id)
     {
         if(user.IsSignIn === 1)
         {
-            return true;
+            const returnObject = {
+                "resultCode":100,
+                "resultMessage": "Success",
+                "data": true
+            }
+            return returnObject;
         }
         else {
-            return false;
+            const returnObject = {
+                "resultCode":100,
+                "resultMessage": "Success",
+                "data": false
+            }
+            return returnObject;
         }
     }
     else {
-        return {"message": "User doesn't exist"};
+        const returnObject = {
+            "resultCode":102,
+            "resultMessage": "User doesn't exist",
+            "data": null
+        }
+        return returnObject;
     }
 }
 
@@ -152,7 +271,8 @@ async function deleteUser(id)
 
 async function firstTimeUser(data)
 {
-    if(data.device_id)
+    const device = await Users.findOne({"device_id":data.device_id});
+    if(!device)
     {
         var username = UsernameGenerator.generateUsername();
         const users = new Users({
@@ -163,10 +283,20 @@ async function firstTimeUser(data)
             IsSignIn:0
         });
         const result = await users.save();
-        return result;
+        const returnObject = {
+            "resultCode":100,
+            "resultMessage": "Success",
+            "data": result
+        }
+        return returnObject;
     }
     else {
-        return "Please Add All the Mandatory fields";
+        const returnObject = {
+            "resultCode":101,
+            "resultMessage": "User Already Exists",
+            "data": null
+        }
+        return returnObject;
     }
 }
 
@@ -175,11 +305,23 @@ async function getIdByDeviceId(device_id)
     const user = await Users.findOne({"device_id":device_id});
     if(user)
     {
-        return {"user_id":user.user_id};
+        const returnObject = {
+            "resultCode":100,
+            "resultMessage": "Success",
+            "data": {"user_id":user.user_id}
+        }
+        return returnObject;
+        //return {"user_id":user.user_id};
     }
     else {
-        return {"message":"User doesnt exist"}
+        const returnObject = {
+            "resultCode":102,
+            "resultMessage": "User doesnt exist",
+            "data": null
+        }
+        return returnObject;
     }
 }
 
-module.exports = {createUsers,getUsers,getUseById,editUsers,deleteUser,firstTimeUser,UserExists,signOut,isSignIn,getIdByDeviceId,Users}
+module.exports = {createUsers,getUsers,getUseById,editUsers,deleteUser,firstTimeUser,
+    UserDeviceExists,UserExists,signOut,isSignIn,getIdByDeviceId,Users,isEmailExists,isPhoneExists}

@@ -41,7 +41,12 @@ async function getFollwingVideos(userId)
         const userdetails = await Users.Users.findOne({"user_id":element.parent_id},{"name":1,"username":1});
         userArray.push({"user": userdetails, "videos": videoUser});
     }
-    return userArray;
+    const returnObject = {
+        "resultCode":100,
+        "resultMessage": "Success",
+        "data": userArray
+    }
+    return returnObject;
 }
 
 module.exports = {createFollows,getFollows,getFollwingVideos}

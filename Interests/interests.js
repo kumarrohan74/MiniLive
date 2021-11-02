@@ -1,35 +1,35 @@
 const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
-const languagesSchema = new mongoose.Schema({
+const interestsSchema = new mongoose.Schema({
     thumb_url:String,
     name:String,
     created_at: {type: Date, default: Date.now },
     updated_at: {type: Date}
 });
 
-languagesSchema.plugin(AutoIncrement, {inc_field: 'languages_id'});
-const Languages = mongoose.model('Languages', languagesSchema);
+interestsSchema.plugin(AutoIncrement, {inc_field: 'interests_id'});
+const Interests = mongoose.model('Interests', interestsSchema);
 
-async function createLanguages(data)
+async function createInterests(data)
 {
-    console.log(data)
     if(data.thumb_url && data.name)
         {
-            const languages = new Languages({
+            const interests = new Interests({
                 thumb_url: data.thumb_url,
                 name:data.name
             });
-            const result = await languages.save();
-            console.log(result)
+            const result = await interests.save();
             return result;
         }
         return "Please Add All the Mandatory fields";
+    
+ 
 }
 
-async function getLanguages()
+async function getInterests()
 {
-    const result = await Languages.find();
+    const result = await Interests.find();
     const returnObject = {
         "resultCode":100,
         "resultMessage": "Success",
@@ -38,4 +38,4 @@ async function getLanguages()
     return returnObject;
 }
 
-module.exports = {createLanguages,getLanguages}
+module.exports = {createInterests,getInterests}

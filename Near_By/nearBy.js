@@ -30,7 +30,12 @@ async function findNearByVideos(data)
         const videos = await Videos.Videos.findOne({"video_id":id},{video_id:1,"like_count":1,"upvotes":1,"downvotes":1,"comment_count":1,"mp4_url":1});
         nearVideos.push(videos)
     }
-    return nearVideos;
+    const returnObject = {
+        "resultCode":100,
+        "resultMessage": "Success",
+        "data": nearVideos
+    }
+    return returnObject;
 }
 
 module.exports = {findNearByVideos}

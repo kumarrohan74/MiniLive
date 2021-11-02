@@ -170,9 +170,14 @@ async function recommendedVideos()
     const mapSort1 = new Map([...map.entries()].sort((a, b) => b[1] - a[1]));
     for (var [key, value] of mapSort1) {
         const video = await Videos.findOne({"video_id":key},{"like_count":1,"upvotes":1,"downvotes":1,"comment_count":1,"mp4_url":1});
-        data.push(video)
+        data.push(video);
     }
-    return data;
+    const returnObject = {
+        "resultCode":100,
+        "resultMessage": "Success",
+        "data": data
+    }
+    return returnObject;
 }
 
 module.exports = {createVideos,getVideos,getUserVideos,editVideos,deleteVideos,Videos,recommendedVideos}
